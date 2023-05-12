@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { color } from '@mui/system';
+// import { color } from '@mui/system';
 
 export default function AddCar({ addCar }) {
    const [open, setOpen] = React.useState(false);
@@ -29,14 +29,14 @@ export default function AddCar({ addCar }) {
    const handleSave = () => {
       addCar(car);
       setOpen(false);
-      // setCars({
-      //    brand: '',
-      //    model: '',
-      //    color: '',
-      //    fuel: '',
-      //    year: '',
-      //    price: ''
-      // })
+      setCars({
+         brand: '',
+         model: '',
+         color: '',
+         fuel: '',
+         year: '',
+         price: ''
+      })
 
    };
 

@@ -1,11 +1,16 @@
+//import React
 import React, { useState, useEffect } from 'react';
+
+//import ag-grid
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 
+//import mui
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 
+//import other components
 import { API_URL } from '../constants';
 import AddCar from './AddCar';
 import EditCar from './EditCar';
@@ -22,9 +27,10 @@ function Carlist () {
       {field: 'fuel', sortable: true, filter: true, width: 100},
       {field: 'year', sortable: true, filter: true, width: 100},
       {field: 'price', sortable: true, filter: true, width: 100},
-      {
-         cellRenderer: params => 
-         <EditCar params={params.data} updateCar={updateCar}/>,  
+      {cellRenderer: params => 
+         <EditCar 
+            params={params.data} 
+            updateCar={updateCar}/>,  
          width: 100
       },
       {cellRenderer: params => 
@@ -38,6 +44,7 @@ function Carlist () {
          , width: 120}
    ])
 
+   //Fetch Date & Save Date
    const getCars = () => {
       fetch(API_URL + 'cars')
       .then(response => {
@@ -51,6 +58,43 @@ function Carlist () {
       .catch(err => console.error(err))
    }
 
+   //Add Function
+   const addCar = (car) => {
+      fetch(API_URL + 'cars', {
+         method: 'POST',
+         headers: {'Content-type':'application/json'},
+         body: JSON.stringify(car)  
+      })
+      .then(response => {
+         if (response.ok) {
+            setMsg('Car added!')
+            setOpen(true);
+            getCars();
+         } else {
+            alert('Something went wrong in addition: ' + response.statusText);
+         }
+      })
+      .catch(err => console.error(err))
+   }
+
+   //Delete Function
+   const deleteCar=(params) => {
+      if (window.confirm('Are you sure?')){
+         fetch(params.data._links.car.href, { method: 'DELETE'})
+         .then(response => {
+            if (response.ok) {
+               setMsg('Car deleted!')
+               setOpen(true);
+               getCars();
+            } else {
+               alert('Something went wrong in deletion.')
+            }
+         })
+         .catch(err => console.error(err))
+      }
+   }
+
+   //Edit Function
    const updateCar = (updateCar, url) => {
       fetch(url, {
          method: 'PUT',
@@ -68,40 +112,6 @@ function Carlist () {
       })
       .catch(err => console.error(err))
    }
-
-   const deleteCar=(params) => {
-      if (window.confirm('Are you sure?')){
-         fetch(params.data._links.car.href, { method: 'DELETE'})
-         .then(response => {
-            if (response.ok) {
-               setMsg('Car deleted!')
-               setOpen(true);
-               getCars();
-            } else {
-               alert('Something went wrong in deletion.')
-            }
-         })
-         .catch(err => console.error(err))
-      }
-   }
-
-   const addCar = (car) => {
-      fetch(API_URL + 'cars', {
-         method: 'POST',
-         headers: {'Content-type':'application/json'},
-         body: JSON.stringify(car)  
-      })
-      .then(response => {
-         if (response.ok) {
-            setMsg('Car added!')
-            setOpen(true);
-            getCars();
-         } else {
-            alert('Something went wrong in addition: ' + response.statusText);
-         }
-      })
-      .catch(err => console.error(err))
-    }
 
    useEffect (() => {
       getCars();
