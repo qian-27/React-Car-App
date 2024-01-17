@@ -1,5 +1,4 @@
 # Introduction
-
 This is the schoolwork I completed on April 17, 2023.
 
 # Task
